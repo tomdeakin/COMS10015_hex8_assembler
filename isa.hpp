@@ -1,6 +1,7 @@
 #include <map>
 #include <iostream>
 #include <string>
+#include <list>
 
 // Defines the type of operand, particular for labels
 // If immediate, the label line number will be used
@@ -20,6 +21,18 @@ class instruction {
   instruction(std::string _inst, int _opcode, operandType _type) : inst(_inst), opcode(_opcode), type(_type) {};
 };
 
+// Structure of an output line
+// If a label needs resolving, we'll store that label here.
+class line {
+  public:
+  std::string opcode;
+  int operand;
+  bool requiresLabelResolution = false;
+  std::string label;
+  int data;
+  bool isData = false;
+};
+
 // The definition of the Hex 8 ISA 
 class ISA {
   // Table to hold the instructions in Hex 8
@@ -27,6 +40,10 @@ class ISA {
 
   // Table to hold the labels and their target output line numbers
   std::map<std::string, int> labels;
+
+  // Stream of instructions to output
+  public:
+  std::list<line> outputStream;
 
   // Create the instruction table for the Hex 8 ISA
   public:
@@ -97,7 +114,7 @@ class ISA {
   }
 
   // Get the label value, depending on the instruction type
-  int resolveLabel(const std::string& label, const int outLineNum, const instruction& inst) {
+  int resolveLabel(const std::string& label, const int outLineNum, const std::string& instName) {
     // Get label number from label table
     if (!labels.count(label)) {
         std::cerr << "Error: unknown label - " << label << std::endl;
@@ -105,13 +122,14 @@ class ISA {
     }
     int labelValue = labels[label];
 
-    std::cout << label << " = " << labelValue << " on line " << outLineNum << std::endl;
+    // Look up instruction
+    auto inst = getInstruction(instName);
 
     switch (inst.type) {
       case operandType::immediate:
         return labelValue;
       case operandType::offset:
-        return labelValue - outLineNum;
+        return labelValue - outLineNum - 1;
       case operandType::none:
         std::cerr << "Error: instruction should not have a label - " << label << std::endl;
         exit(EXIT_FAILURE);
@@ -120,5 +138,19 @@ class ISA {
 
   void printLabelCount() {
     std::cout << "Number of labels: " << labels.size() << std::endl;
+  }
+
+  void printLabels() {
+    for (auto l : labels) {
+      std::cout << l.first << " -> line " << l.second << std::endl;
+    }
+  }
+
+  void emitInstruction(const line& outputLine) {
+    outputStream.push_back(outputLine);
+  }
+
+  int getOutputLength() {
+    return outputStream.size();
   }
 };
