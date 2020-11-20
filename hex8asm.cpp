@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
+#include <cassert>
 
 
 #include "hex8asm.hpp"
