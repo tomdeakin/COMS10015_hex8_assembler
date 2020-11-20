@@ -1,3 +1,6 @@
+// Copyright (c) 2020 Tom Deakin
+// SPDX-License-Identifier: MIT
+
 #include <iostream>
 #include <fstream>
 #include <string>
