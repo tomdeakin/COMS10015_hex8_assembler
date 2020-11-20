@@ -35,8 +35,26 @@ class line {
 
 // The definition of the Hex 8 ISA 
 class ISA {
-  // Table to hold the instructions in Hex 8
-  std::map<std::string, instruction> table;
+
+  // Instruction table for the Hex 8 ISA
+  const std::map<std::string, instruction> table = {
+    {"ldam", {"ldam", 0x0, operandType::immediate}},
+    {"ldbm", {"ldbm", 0x1, operandType::immediate}},
+    {"stam", {"stam", 0x2, operandType::immediate}},
+    {"ldac", {"ldac", 0x3, operandType::immediate}},
+    {"ldbc", {"ldbc", 0x4, operandType::immediate}},
+    {"ldap", {"ldap", 0x5, operandType::offset}},
+    {"ldai", {"ldai", 0x6, operandType::immediate}},
+    {"ldbi", {"ldbi", 0x7, operandType::immediate}},
+    {"stai", {"stai", 0x8, operandType::immediate}},
+    {"br",   {"br",   0x9, operandType::offset}},
+    {"brz",  {"brz",  0xA, operandType::offset}},
+    {"brn",  {"brn",  0xB, operandType::offset}},
+    {"brb",  {"brb",  0xC, operandType::none}},
+    {"add",  {"add",  0xD, operandType::none}},
+    {"sub",  {"sub",  0xE, operandType::none}},
+    {"pfix", {"pfix", 0xF, operandType::immediate}}
+  };
 
   // Table to hold the labels and their target output line numbers
   std::map<std::string, int> labels;
@@ -44,27 +62,6 @@ class ISA {
   // Stream of instructions to output
   public:
   std::list<line> outputStream;
-
-  // Create the instruction table for the Hex 8 ISA
-  public:
-  ISA() {
-    table["ldam"] = instruction("ldam", 0x0, operandType::immediate);
-    table["ldbm"] = instruction("ldbm", 0x1, operandType::immediate);
-    table["stam"] = instruction("stam", 0x2, operandType::immediate);
-    table["ldac"] = instruction("ldac", 0x3, operandType::immediate);
-    table["ldbc"] = instruction("ldbc", 0x4, operandType::immediate);
-    table["ldap"] = instruction("ldap", 0x5, operandType::offset);
-    table["ldai"] = instruction("ldai", 0x6, operandType::immediate);
-    table["ldbi"] = instruction("ldbi", 0x7, operandType::immediate);
-    table["stai"] = instruction("stai", 0x8, operandType::immediate);
-    table["br"]   = instruction("br",   0x9, operandType::offset);
-    table["brz"]  = instruction("brz",  0xA, operandType::offset);
-    table["brn"]  = instruction("brn",  0xB, operandType::offset);
-    table["brb"]  = instruction("brb",  0xC, operandType::none);
-    table["add"]  = instruction("add",  0xD, operandType::none);
-    table["sub"]  = instruction("sub",  0xE, operandType::none);
-    table["pfix"] = instruction("pfix", 0xF, operandType::immediate);
-  };
 
   // Look up an opcode in the table
   const instruction& getInstruction(const std::string& inst) {
