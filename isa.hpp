@@ -54,9 +54,7 @@ class ISA {
     {"pfix", {"pfix", 0xF, operandType::immediate}}
   };
 
-  // Stream of instructions to output
   public:
-  std::list<line> outputStream;
 
   // Look up an opcode in the table
   const instruction& getInstruction(const std::string& inst) const {
@@ -85,14 +83,6 @@ class ISA {
 
     auto rest = inst.substr(1);
     return std::all_of(rest.begin(), rest.end(), ::isdigit);
-  }
-
-  void emitInstruction(const line& outputLine) {
-    outputStream.push_back(outputLine);
-  }
-
-  int getOutputLength() {
-    return outputStream.size();
   }
 };
 
@@ -157,4 +147,20 @@ class assemblyLabels {
     };
   }
 
+};
+
+class hexOutputStream {
+  // Stream of instructions to output
+  public:
+  std::list<line> outputStream;
+
+  // Add instruction to the output
+  void emitInstruction(const line& outputLine) {
+    outputStream.push_back(outputLine);
+  }
+
+  // Get length of output stream
+  int getOutputLength() {
+    return outputStream.size();
+  }
 };

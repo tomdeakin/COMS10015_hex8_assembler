@@ -42,6 +42,9 @@ int main(int argc, char *argv[]) {
   // Create table of labels
   assemblyLabels labels;
 
+  // Create hex output stream
+  hexOutputStream outputStream;
+
   // First pass
   // Loop over the file and translate each instruction
   // When labels are defined, save them along with the output line number
@@ -85,7 +88,7 @@ int main(int argc, char *argv[]) {
         labels.setLabels(labelDeclarations, outLineNum);
         // Empty the list of labels to process
         labelDeclarations.clear();
-        assert(outLineNum == hex8.getOutputLength());
+        assert(outLineNum == outputStream.getOutputLength());
 
         // Check that it has an operand.
         if (tokens.size() != 2) {
@@ -100,7 +103,7 @@ int main(int argc, char *argv[]) {
         class line output;
         output.data = (data & 0xFF);
         output.isData = true;
-        hex8.emitInstruction(output);
+        outputStream.emitInstruction(output);
         outLineNum++;
 
 
@@ -128,7 +131,7 @@ int main(int argc, char *argv[]) {
             prefix.opcode = "pfix";
             prefix.requiresLabelResolution = true;
             prefix.label = tokens[1];
-            hex8.emitInstruction(prefix);
+            outputStream.emitInstruction(prefix);
             outLineNum++;
 
             // Then emit this instruction
@@ -136,9 +139,9 @@ int main(int argc, char *argv[]) {
             output.opcode = tokens[0];
             output.requiresLabelResolution = true;
             output.label = tokens[1];
-            hex8.emitInstruction(output);
+            outputStream.emitInstruction(output);
             outLineNum++;
-            assert(outLineNum == hex8.getOutputLength());
+            assert(outLineNum == outputStream.getOutputLength());
           } else {
             // Otherwise, operand is just an integer
 
@@ -151,7 +154,7 @@ int main(int argc, char *argv[]) {
               class line prefix;
               prefix.opcode = "pfix";
               prefix.operand = ((operand & 0xFF) >> 0x4); // 4 high bits
-              hex8.emitInstruction(prefix);
+              outputStream.emitInstruction(prefix);
               outLineNum++;
             }
 
@@ -159,18 +162,18 @@ int main(int argc, char *argv[]) {
             class line output;
             output.opcode = tokens[0];
             output.operand = (operand & 0xF); // 4 low bits
-            hex8.emitInstruction(output);
+            outputStream.emitInstruction(output);
             outLineNum++;
-            assert(outLineNum == hex8.getOutputLength());
+            assert(outLineNum == outputStream.getOutputLength());
           }
         } else {
           // Instruction has no operand
           class line output;
           output.opcode = tokens[0];
           output.operand = 0;
-          hex8.emitInstruction(output);
+          outputStream.emitInstruction(output);
           outLineNum++;
-          assert(outLineNum == hex8.getOutputLength());
+          assert(outLineNum == outputStream.getOutputLength());
         }
       }
       srcLineNum++;
@@ -191,7 +194,7 @@ int main(int argc, char *argv[]) {
     // Second pass
     // Now we just loop over the output instructions, and resolve any outstanding labels
     int outLineNum = 0;
-    for (auto out = hex8.outputStream.begin(); out != hex8.outputStream.end(); ++out) {
+    for (auto out = outputStream.outputStream.begin(); out != outputStream.outputStream.end(); ++out) {
       auto output = *out;
       if (output.requiresLabelResolution) {
         // Will be either a prefix or an instruction
