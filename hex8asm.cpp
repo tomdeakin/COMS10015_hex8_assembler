@@ -7,7 +7,7 @@
 #include <iomanip>
 
 
-#include "isa.hpp"
+#include "hex8asm.hpp"
 
 // Output file name
 static constexpr char outputFile[] = "a.hex";
