@@ -54,15 +54,12 @@ class ISA {
     {"pfix", {"pfix", 0xF, operandType::immediate}}
   };
 
-  // Table to hold the labels and their target output line numbers
-  std::map<std::string, int> labels;
-
   // Stream of instructions to output
   public:
   std::list<line> outputStream;
 
   // Look up an opcode in the table
-  const instruction& getInstruction(const std::string& inst) {
+  const instruction& getInstruction(const std::string& inst) const {
     try {
       return table.at(inst);
     } catch (std::out_of_range& err) {
@@ -90,6 +87,23 @@ class ISA {
     return std::all_of(rest.begin(), rest.end(), ::isdigit);
   }
 
+  void emitInstruction(const line& outputLine) {
+    outputStream.push_back(outputLine);
+  }
+
+  int getOutputLength() {
+    return outputStream.size();
+  }
+};
+
+
+// Hold the mapping of labels to output line numbers
+class assemblyLabels {
+  // Table to hold the labels and their target output line numbers
+  std::map<std::string, int> labels;
+
+  public:
+
   // Add the evaluated labels to the label table
   void setLabels(const std::vector<std::string>& labelsToStore, const int outLineNum) {
     for (auto l : labelsToStore) {
@@ -108,8 +122,20 @@ class ISA {
     return labels.count(label);
   }
 
+  // Display the number of labels in the table
+  void printLabelCount() {
+    std::cout << "Number of labels: " << labels.size() << std::endl;
+  }
+
+  // Display the label table
+  void printLabels() {
+    for (auto l : labels) {
+      std::cout << l.first << " -> line " << l.second << std::endl;
+    }
+  }
+
   // Get the label value, depending on the instruction type
-  int resolveLabel(const std::string& label, const int outLineNum, const std::string& instName) {
+  int resolveLabel(const class ISA& hex8, const std::string& label, const int outLineNum, const std::string& instName) {
     // Get label number from label table
     if (!labels.count(label)) {
         std::cerr << "Error: unknown label - " << label << std::endl;
@@ -118,7 +144,7 @@ class ISA {
     int labelValue = labels[label];
 
     // Look up instruction
-    auto inst = getInstruction(instName);
+    auto inst = hex8.getInstruction(instName);
 
     switch (inst.type) {
       case operandType::immediate:
@@ -131,21 +157,4 @@ class ISA {
     };
   }
 
-  void printLabelCount() {
-    std::cout << "Number of labels: " << labels.size() << std::endl;
-  }
-
-  void printLabels() {
-    for (auto l : labels) {
-      std::cout << l.first << " -> line " << l.second << std::endl;
-    }
-  }
-
-  void emitInstruction(const line& outputLine) {
-    outputStream.push_back(outputLine);
-  }
-
-  int getOutputLength() {
-    return outputStream.size();
-  }
 };

@@ -39,6 +39,9 @@ int main(int argc, char *argv[]) {
   // Set up Hex 8 ISA
   ISA hex8;
 
+  // Create table of labels
+  assemblyLabels labels;
+
   // First pass
   // Loop over the file and translate each instruction
   // When labels are defined, save them along with the output line number
@@ -77,9 +80,9 @@ int main(int argc, char *argv[]) {
       } else if (hex8.validData(tokens[0])) {
         // Process the data instructions
         // Found a line of the form DATA xxx
-        
+
         // Now found a non-label, so know target of labels is this current output line
-        hex8.setLabels(labelDeclarations, outLineNum);
+        labels.setLabels(labelDeclarations, outLineNum);
         // Empty the list of labels to process
         labelDeclarations.clear();
         assert(outLineNum == hex8.getOutputLength());
@@ -107,7 +110,7 @@ int main(int argc, char *argv[]) {
         auto inst = hex8.getInstruction(tokens[0]);
 
         // Now found a non-label, so know target of labels is the next output line
-        hex8.setLabels(labelDeclarations, outLineNum);
+        labels.setLabels(labelDeclarations, outLineNum);
         // Empty the list of labels to process
         labelDeclarations.clear();
 
@@ -178,8 +181,8 @@ int main(int argc, char *argv[]) {
     std::cout << "Pass 1 successful" << std::endl;
     std::cout << "Lines of source: " << srcLineNum << std::endl;
     std::cout << std::endl;
-    hex8.printLabelCount();
-    hex8.printLabels();
+    labels.printLabelCount();
+    labels.printLabels();
     std::cout << "--------------------------------------------------------------------------------" << std::endl << std::endl;
   } // End of pass 1
 
@@ -196,10 +199,10 @@ int main(int argc, char *argv[]) {
           // Set the operand to be the 4 high bits of the label
           // Label offsets will be from the next line, so +1 to the line number
           // TODO need to know type of next instruction
-          output.operand = ((hex8.resolveLabel(output.label, outLineNum+1, std::next(out)->opcode) >> 0x4) & 0xF);
+          output.operand = ((labels.resolveLabel(hex8, output.label, outLineNum+1, std::next(out)->opcode) >> 0x4) & 0xF);
         } else {
           // Set the operand to be the 4 low bits of the label
-          output.operand = (hex8.resolveLabel(output.label, outLineNum, output.opcode) & 0xF);
+          output.operand = (labels.resolveLabel(hex8, output.label, outLineNum, output.opcode) & 0xF);
         }
       }
 
