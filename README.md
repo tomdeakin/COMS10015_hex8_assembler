@@ -51,8 +51,8 @@ Support is also included for the `DATA` mnemonic.
 
 For example:
 
-   DATA 42
-   DATA L1
+    DATA 42
+    DATA L1
 
 The assembler simply outputs the operand into the instruction stream.
 For large absolute numbers and all labels, the assembler outputs `PFIX` instructions.
