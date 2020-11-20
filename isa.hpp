@@ -16,7 +16,7 @@ class instruction {
   int opcode;
   operandType type;
   
-  instruction() {};
+  instruction() = default;
 
   instruction(std::string _inst, int _opcode, operandType _type) : inst(_inst), opcode(_opcode), type(_type) {};
 };
