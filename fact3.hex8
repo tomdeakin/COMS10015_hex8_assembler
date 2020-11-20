@@ -1,0 +1,191 @@
+  BR      L6
+  DATA    -2
+  DATA    0
+L6
+  LDAP    L8
+  BR      L7
+L8
+  LDAI    1
+  BR      -2
+L7
+L2
+  LDBM    2
+  STAI    0
+  LDAC    -4
+  ADD     
+  STAM    2
+  LDAC    5
+  LDBM    2
+  STAI    2
+  LDAP    L9
+  BR      L5
+L9
+  LDAI    1
+  LDBM    2
+  STAI    5
+  LDAC    4
+  ADD     
+  STAM    2
+  LDBI    4
+  BRB     
+L3
+  LDBM    2
+  STAI    0
+  LDAC    -6
+  ADD     
+  STAM    2
+  LDAM    2
+  LDAI    8
+  LDBM    3
+  SUB     
+  BRN     L12
+  BR      L11
+L12
+  LDAM    2
+  LDAI    9
+  LDBM    2
+  LDBI    9
+  ADD     
+  LDBM    2
+  STAI    3
+  LDAM    2
+  LDAI    8
+  LDBM    2
+  LDBI    8
+  ADD     
+  LDBM    2
+  STAI    2
+  LDAP    L13
+  BR      L3
+L13
+  LDAI    1
+  LDBM    2
+  STAI    5
+  BR      L10
+L11
+  LDAC    0
+  LDBM    2
+  STAI    5
+L10
+  LDAM    3
+  LDBM    2
+  LDBI    8
+  SUB     
+  BRN     L14
+  LDAM    3
+  LDBM    2
+  LDBI    8
+  SUB     
+  STAM    3
+  LDAM    2
+  LDAI    5
+  LDBM    2
+  LDBI    9
+  ADD     
+  LDBM    2
+  STAI    5
+L14
+  LDAM    2
+  LDAI    5
+  LDBM    2
+  STAI    7
+  LDAC    6
+  ADD     
+  STAM    2
+  LDBI    6
+  BRB     
+L4
+  LDBM    2
+  STAI    0
+  LDAC    -6
+  ADD     
+  STAM    2
+  LDAM    2
+  LDAI    8
+  LDBM    2
+  LDBI    9
+  SUB     
+  BRN     L17
+  BR      L16
+L17
+  LDAM    2
+  LDAI    8
+  STAM    3
+  LDAM    2
+  LDAI    9
+  LDBM    2
+  STAI    5
+  BR      L15
+L16
+  LDAM    2
+  LDAI    9
+  STAM    3
+  LDAM    2
+  LDAI    8
+  LDBM    2
+  STAI    5
+L15
+  LDAM    2
+  LDAI    5
+  LDBM    2
+  STAI    3
+  LDAC    1
+  LDBM    2
+  STAI    2
+  LDAP    L18
+  BR      L3
+L18
+  LDAI    1
+  LDBM    2
+  STAI    7
+  LDAC    6
+  ADD     
+  STAM    2
+  LDBI    6
+  BRB     
+L5
+  LDBM    2
+  STAI    0
+  LDAC    -6
+  ADD     
+  STAM    2
+  LDAM    2
+  LDAI    8
+  BRZ     L21
+  BR      L20
+L21
+  LDAC    1
+  BR      L19
+L20
+  LDAM    2
+  LDAI    8
+  LDBC    1
+  SUB     
+  LDBM    2
+  STAI    2
+  LDAP    L22
+  BR      L5
+L22
+  LDAI    1
+  LDBM    2
+  STAI    5
+  LDAM    2
+  LDAI    8
+  LDBM    2
+  STAI    2
+  LDAM    2
+  LDAI    5
+  LDBM    2
+  STAI    3
+  LDAP    L23
+  BR      L4
+L23
+  LDAI    1
+L19
+  LDBM    2
+  STAI    7
+  LDAC    6
+  ADD     
+  STAM    2
+  LDBI    6
+  BRB     
