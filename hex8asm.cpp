@@ -186,12 +186,15 @@ int main(int argc, char *argv[]) {
     // Second pass
     // Now we just loop over the output instructions, and resolve any outstanding labels
     int outLineNum = 0;
-    for (auto& output : hex8.outputStream) {
+    for (auto out = hex8.outputStream.begin(); out != hex8.outputStream.end(); ++out) {
+      auto output = *out;
       if (output.requiresLabelResolution) {
         // Will be either a prefix or an instruction
         if (output.opcode == "pfix") {
           // Set the operand to be the 4 high bits of the label
-          output.operand = ((hex8.resolveLabel(output.label, outLineNum, output.opcode) & 0xFF) >> 0x4);
+          // Label offsets will be from the next line, so +1 to the line number
+          // TODO need to know type of next instruction
+          output.operand = ((hex8.resolveLabel(output.label, outLineNum+1, std::next(out)->opcode) >> 0x4) & 0xF);
         } else {
           // Set the operand to be the 4 low bits of the label
           output.operand = (hex8.resolveLabel(output.label, outLineNum, output.opcode) & 0xF);
