@@ -77,6 +77,12 @@ int main(int argc, char *argv[]) {
       } else if (hex8.validData(tokens[0])) {
         // Process the data instructions
         // Found a line of the form DATA xxx
+        
+        // Now found a non-label, so know target of labels is this current output line
+        hex8.setLabels(labelDeclarations, outLineNum);
+        // Empty the list of labels to process
+        labelDeclarations.clear();
+        assert(outLineNum == hex8.getOutputLength());
 
         // Check that it has an operand.
         if (tokens.size() != 2) {
@@ -94,11 +100,7 @@ int main(int argc, char *argv[]) {
         hex8.emitInstruction(output);
         outLineNum++;
 
-        // Now found a non-label, so know target of labels is this current output line
-        hex8.setLabels(labelDeclarations, outLineNum);
-        // Empty the list of labels to process
-        labelDeclarations.clear();
-        assert(outLineNum == hex8.getOutputLength());
+
 
       } else if (hex8.validInstruction(tokens[0])) {
         // Process a regular instruction
