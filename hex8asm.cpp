@@ -205,7 +205,6 @@ int main(int argc, char *argv[]) {
         if (output.opcode == "pfix") {
           // Set the operand to be the 4 high bits of the label
           // Label offsets will be from the next line, so +1 to the line number
-          // TODO need to know type of next instruction
           output.operand = ((labels.resolveLabel(hex8, output.label, outLineNum+1, std::next(out)->opcode) >> 0x4) & 0xF);
         } else {
           // Set the operand to be the 4 low bits of the label
