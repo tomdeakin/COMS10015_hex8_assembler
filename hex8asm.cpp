@@ -216,8 +216,10 @@ int main(int argc, char *argv[]) {
         if (output.data == 0) {
           hexOutput << "00 ";
           std::cout << std::dec << outLineNum << ": DATA 0" << std::endl;
-        }
-        else {
+        } else if (output.data <= 0xF) {
+          hexOutput << std::hex << std::uppercase << "0" << (output.data & 0xF) << " ";
+          std::cout << std::dec << outLineNum << ": DATA " << std::hex << std::uppercase << (output.data & 0xFF) << std::endl;
+        } else {
           hexOutput << std::hex << std::uppercase << (output.data & 0xFF) << " ";
           std::cout << std::dec << outLineNum << ": DATA " << std::hex << std::uppercase << (output.data & 0xFF) << std::endl;
         }
